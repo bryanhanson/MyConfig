@@ -10,34 +10,53 @@ import UIKit
 class ViewController: UIViewController {
 
 
-    // constants local to view controller
+    // Constants local to view controller
+    
+    let width = UIScreen.mainScreen().bounds.size.width
+    let height = UIScreen.mainScreen().bounds.size.height
+    
+    // Constants local to view controller
+    // These also create view objects
     
     let button1 = UIButton.buttonWithType(UIButtonType.System) as UIButton
     let button2 = UIButton.buttonWithType(UIButtonType.System) as UIButton
     let label1 = UILabel() as UILabel
-    let width = UIScreen.mainScreen().bounds.size.width
-    let height = UIScreen.mainScreen().bounds.size.height
+
+    // Variables local to view controller
+    // Create a totally generic text view
+
+    var txtView = UITextView(frame:CGRect(), textContainer:NSTextContainer?())
     
+    // Everything below here is a function
+
+    // This next function makes everything happen!!!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.yellowColor()
+        layoutButtons()
+        layoutTextView()
+        pushText("Click a button to see the details of the device configuration.")
+        
+    }
+
     func layoutButtons(){
         
         // Layout Buttons and Label in upper portion of device
         
-        // Buttons to select hardware or software
+        // Configure buttons to select hardware or software
         
-        button1.setTranslatesAutoresizingMaskIntoConstraints(false)
         button1.setTitle("Software", forState: UIControlState.Normal)
         button1.addTarget(self, action: "showSoft", forControlEvents: UIControlEvents.TouchUpInside)
         button1.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
 
-        button2.setTranslatesAutoresizingMaskIntoConstraints(false)
         button2.setTitle("Hardware", forState: UIControlState.Normal)
         button2.addTarget(self, action: "showHard", forControlEvents: UIControlEvents.TouchUpInside)
         button2.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
 
-        // A label giving instructions
+        // Configure label giving instructions
 
         label1.text = "Click a button see device configuration"
-        label1.setTranslatesAutoresizingMaskIntoConstraints(false)
 
         // Add the views
         
@@ -45,18 +64,18 @@ class ViewController: UIViewController {
         view.addSubview(button2)
         view.addSubview(label1)
         
-        // Set up constraints
+        // Create constraints
         
         // Dictionaries make all this accessible
         
         let viewsDictionary = ["button1": button1, "button2": button2, "label1": label1]
         
-        // Sizing constraints
+        // Size constraints
         // Buttons and Labels have instrinsic sizes so no need to set explicity
         
         // Position constraints
 
-        let label1_H = NSLayoutConstraint(
+        let label1_Hpos = NSLayoutConstraint(
             item: label1,
             attribute: NSLayoutAttribute.CenterX,
             relatedBy: NSLayoutRelation.Equal,
@@ -65,7 +84,7 @@ class ViewController: UIViewController {
             multiplier: 1.0,
             constant: 0.0)
         
-        let label1_V = NSLayoutConstraint(
+        let label1_Vpos = NSLayoutConstraint(
             item: label1,
             attribute: NSLayoutAttribute.CenterY,
             relatedBy: NSLayoutRelation.Equal,
@@ -74,7 +93,7 @@ class ViewController: UIViewController {
             multiplier: 0.15,
             constant: 0)
  
-        let button1_H = NSLayoutConstraint(
+        let button1_Hpos = NSLayoutConstraint(
             item: button1,
             attribute: NSLayoutAttribute.CenterX,
             relatedBy: NSLayoutRelation.Equal,
@@ -83,7 +102,7 @@ class ViewController: UIViewController {
             multiplier: 1.0,
             constant: -1*width*0.15)
         
-        let button1_V = NSLayoutConstraint(
+        let button1_Vpos = NSLayoutConstraint(
             item: button1,
             attribute: NSLayoutAttribute.CenterY,
             relatedBy: NSLayoutRelation.Equal,
@@ -92,7 +111,7 @@ class ViewController: UIViewController {
             multiplier: 0.25,
             constant: 0)
         
-        let button2_H = NSLayoutConstraint(
+        let button2_Hpos = NSLayoutConstraint(
             item: button2,
             attribute: NSLayoutAttribute.CenterX,
             relatedBy: NSLayoutRelation.Equal,
@@ -101,7 +120,7 @@ class ViewController: UIViewController {
             multiplier: 1.0,
             constant: width*0.15)
         
-        let button2_V = NSLayoutConstraint(
+        let button2_Vpos = NSLayoutConstraint(
             item: button2,
             attribute: NSLayoutAttribute.CenterY,
             relatedBy: NSLayoutRelation.Equal,
@@ -110,74 +129,102 @@ class ViewController: UIViewController {
             multiplier: 0.25,
             constant: 0)
 
-        view.addConstraint(label1_H)
-        view.addConstraint(label1_V)
-        view.addConstraint(button1_H)
-        view.addConstraint(button1_V)
-        view.addConstraint(button2_H)
-        view.addConstraint(button2_V)
-
-    } // end of layoutButtons
-
-    // Button handlers
-    
-    func showSoft() {
-        pushTextView("You old softy!")
-        println("Button 1 (software) was clicked")
-    }
-    
-    func showHard() {
-        pushTextView("You are an iron man!")
-        println("Button 2 (hardware) was clicked")
-    }
-    
-    
-    func pushTextView(theString: String) {
-
-        var msgString = NSMutableString(string: theString)
-//        var msgString = NSAttributedString(string: theString)
+        // Turn off autolayout
         
-        let tvh = height - (height*0.15) - (width*0.05)
-        let tv = CGRect(x: width*0.05, y: height*0.15, width: width*0.9, height: tvh)
+        button1.setTranslatesAutoresizingMaskIntoConstraints(false)
+        button2.setTranslatesAutoresizingMaskIntoConstraints(false)
+        label1.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        // Add the constraints
+        
+        view.addConstraint(label1_Hpos)
+        view.addConstraint(label1_Vpos)
+        view.addConstraint(button1_Hpos)
+        view.addConstraint(button1_Vpos)
+        view.addConstraint(button2_Hpos)
+        view.addConstraint(button2_Vpos)
 
-        // The absolute simpliest way to configure the UITextView
-        
-        var txtView = UITextView(frame:tv, textContainer:NSTextContainer?())
-        
-       // Set up the UITextView for using styled text
-        
-//        var txtStore = NSTextStorage()
-//        var layMan = NSLayoutManager()
-//        let txtCon = NSTextContainer(size: tv.size)
-//        var txtView = UITextView(frame:tv, textContainer:txtCon)
-//
-//        layMan.addTextContainer(txtCon)
-//        txtStore.addLayoutManager(layMan)
+    } // End of layoutButtons
 
-        txtView.text = msgString
+    func layoutTextView(){
+        
+        // Layout a region in which to report the device configuration
+        // See layoutButtons for additional comments
+        
         txtView.textColor = UIColor.blackColor()
         txtView.backgroundColor = UIColor.greenColor()
         txtView.scrollEnabled = true
         txtView.editable = false
+
+        // Add the view, create constraints, make it so
+        
         view.addSubview(txtView)
+        let viewsDictionary = ["txtView": txtView]
         
-    } // end of pushTextView
-    
-    // Set up handling orientations
-    // How to set the orientation. The return value is not what we expect, Int not UInt so we cast.
+        let tv_Hpos = NSLayoutConstraint(
+            item: txtView,
+            attribute: NSLayoutAttribute.CenterX,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: view,
+            attribute: NSLayoutAttribute.CenterX,
+            multiplier: 1.0,
+            constant: 0.0)
+        
+        let tv_Vpos = NSLayoutConstraint(
+            item: txtView,
+            attribute: NSLayoutAttribute.CenterY,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: view,
+            attribute: NSLayoutAttribute.CenterY,
+            multiplier: 1.0,
+            constant: 0.0)
 
-//    override func supportedInterfaceOrientations() -> Int {
-//        return Int(UIInterfaceOrientationMask.All.toRaw())
-//    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor.yellowColor()
-        layoutButtons()
-        pushTextView("Click a button to see the details of the device configuration.")
+        let tv_Hsize = NSLayoutConstraint(
+            item: txtView,
+            attribute: NSLayoutAttribute.Width,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: view,
+            attribute: NSLayoutAttribute.Width,
+            multiplier: 0.9,
+            constant: 0.0)
+
+        let tv_Vsize = NSLayoutConstraint(
+            item: txtView,
+            attribute: NSLayoutAttribute.Height,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: view,
+            attribute: NSLayoutAttribute.Height,
+            multiplier:0.65,
+            constant: 0.0)
+
+
+        txtView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.addConstraint(tv_Hpos)
+        view.addConstraint(tv_Vpos)
+        view.addConstraint(tv_Hsize)
+        view.addConstraint(tv_Vsize)
         
+    } // end of layoutTextView
+
+    // Button handlers
+    
+    func showSoft() {
+        pushText("You old softy!")
+//        println("Button 1 (software) was clicked")
     }
+    
+    func showHard() {
+        pushText("You are an iron man!")
+//        println("Button 2 (hardware) was clicked")
+    }
+    
+    func pushText(theString: String) {
 
+        var msgString = NSMutableString(string: theString)
+        txtView.text = msgString
+        
+    } // end of pushText
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
