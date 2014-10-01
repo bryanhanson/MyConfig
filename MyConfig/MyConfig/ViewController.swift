@@ -10,14 +10,13 @@ import UIKit
 class ViewController: UIViewController {
 
 
-    // variables local to view controller
+    // constants local to view controller
     
     let button1 = UIButton.buttonWithType(UIButtonType.System) as UIButton
     let button2 = UIButton.buttonWithType(UIButtonType.System) as UIButton
     let label1 = UILabel() as UILabel
     let width = UIScreen.mainScreen().bounds.size.width
     let height = UIScreen.mainScreen().bounds.size.height
-//    var txtView: UITextView!
     
     func layoutButtons(){
         
@@ -135,45 +134,50 @@ class ViewController: UIViewController {
     
     func pushTextView(theString: String) {
 
-        let msgString = NSMutableString(string: theString)
+        var msgString = NSMutableString(string: theString)
+//        var msgString = NSAttributedString(string: theString)
         
         let tvh = height - (height*0.15) - (width*0.05)
         let tv = CGRect(x: width*0.05, y: height*0.15, width: width*0.9, height: tvh)
-        let txtStore = NSTextStorage()
-        let layMan = NSLayoutManager()
-        let txtCon = NSTextContainer(size: tv.size)
-        var txtView = UITextView(frame:tv, textContainer:txtCon)
 
-        layMan.addTextContainer(txtCon)
-        txtStore.addLayoutManager(layMan)
+        // The absolute simpliest way to configure the UITextView
         
+        var txtView = UITextView(frame:tv, textContainer:NSTextContainer?())
+        
+       // Set up the UITextView for using styled text
+        
+//        var txtStore = NSTextStorage()
+//        var layMan = NSLayoutManager()
+//        let txtCon = NSTextContainer(size: tv.size)
+//        var txtView = UITextView(frame:tv, textContainer:txtCon)
+//
+//        layMan.addTextContainer(txtCon)
+//        txtStore.addLayoutManager(layMan)
+
         txtView.text = msgString
         txtView.textColor = UIColor.blackColor()
-        txtView.scrollEnabled = true
         txtView.backgroundColor = UIColor.greenColor()
-        self.view.addSubview(txtView)
-
+        txtView.scrollEnabled = true
+        txtView.editable = false
+        view.addSubview(txtView)
+        
     } // end of pushTextView
     
     // Set up handling orientations
     // How to set the orientation. The return value is not what we expect, Int not UInt so we cast.
 
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.All.toRaw())
-    }
-
-    // Required Apple Methods
+//    override func supportedInterfaceOrientations() -> Int {
+//        return Int(UIInterfaceOrientationMask.All.toRaw())
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.yellowColor()
-        println("Device width is \(width)")
-        println("Device height is \(height)")
         layoutButtons()
         pushTextView("Click a button to see the details of the device configuration.")
         
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
