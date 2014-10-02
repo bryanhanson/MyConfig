@@ -43,6 +43,8 @@ class ViewController: UIViewController {
     func layoutButtons(){
         
         // Layout Buttons and Label in upper portion of device
+        // Here an in layoutTextView everything is positioned
+        // as a fraction of the width or height
         
         // Configure buttons to select hardware or software
         
@@ -75,6 +77,8 @@ class ViewController: UIViewController {
         
         // Position constraints
 
+        let offset = 0.1*width
+
         let label1_Hpos = NSLayoutConstraint(
             item: label1,
             attribute: NSLayoutAttribute.CenterX,
@@ -89,9 +93,9 @@ class ViewController: UIViewController {
             attribute: NSLayoutAttribute.CenterY,
             relatedBy: NSLayoutRelation.Equal,
             toItem: view,
-            attribute: NSLayoutAttribute.CenterY,
-            multiplier: 0.15,
-            constant: 0)
+            attribute: NSLayoutAttribute.Top,
+            multiplier: 1.0,
+            constant: offset)
  
         let button1_Hpos = NSLayoutConstraint(
             item: button1,
@@ -107,9 +111,9 @@ class ViewController: UIViewController {
             attribute: NSLayoutAttribute.CenterY,
             relatedBy: NSLayoutRelation.Equal,
             toItem: view,
-            attribute: NSLayoutAttribute.CenterY,
-            multiplier: 0.25,
-            constant: 0)
+            attribute: NSLayoutAttribute.Top,
+            multiplier: 1.0,
+            constant: offset*2)
         
         let button2_Hpos = NSLayoutConstraint(
             item: button2,
@@ -125,9 +129,9 @@ class ViewController: UIViewController {
             attribute: NSLayoutAttribute.CenterY,
             relatedBy: NSLayoutRelation.Equal,
             toItem: view,
-            attribute: NSLayoutAttribute.CenterY,
-            multiplier: 0.25,
-            constant: 0)
+            attribute: NSLayoutAttribute.Top,
+            multiplier: 1.0,
+            constant: 2.0*offset)
 
         // Turn off autolayout
         
@@ -160,49 +164,49 @@ class ViewController: UIViewController {
         
         view.addSubview(txtView)
         let viewsDictionary = ["txtView": txtView]
+        let offset = 0.1*width
         
-        let tv_Hpos = NSLayoutConstraint(
+        let tv_left = NSLayoutConstraint(
             item: txtView,
-            attribute: NSLayoutAttribute.CenterX,
+            attribute: NSLayoutAttribute.Left,
             relatedBy: NSLayoutRelation.Equal,
             toItem: view,
-            attribute: NSLayoutAttribute.CenterX,
+            attribute: NSLayoutAttribute.Left,
             multiplier: 1.0,
-            constant: 0.0)
+            constant: offset)
+
+        let tv_right = NSLayoutConstraint(
+            item: txtView,
+            attribute: NSLayoutAttribute.Right,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: view,
+            attribute: NSLayoutAttribute.Right,
+            multiplier: 1.0,
+            constant: -1.0*offset)
+
+        let tv_top = NSLayoutConstraint(
+            item: txtView,
+            attribute: NSLayoutAttribute.Top,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: view,
+            attribute: NSLayoutAttribute.Top,
+            multiplier: 1.0,
+            constant: offset*3)
         
-        let tv_Vpos = NSLayoutConstraint(
+        let tv_bottom = NSLayoutConstraint(
             item: txtView,
-            attribute: NSLayoutAttribute.CenterY,
+            attribute: NSLayoutAttribute.Bottom,
             relatedBy: NSLayoutRelation.Equal,
             toItem: view,
-            attribute: NSLayoutAttribute.CenterY,
+            attribute: NSLayoutAttribute.Bottom,
             multiplier: 1.0,
-            constant: 0.0)
-
-        let tv_Hsize = NSLayoutConstraint(
-            item: txtView,
-            attribute: NSLayoutAttribute.Width,
-            relatedBy: NSLayoutRelation.Equal,
-            toItem: view,
-            attribute: NSLayoutAttribute.Width,
-            multiplier: 0.9,
-            constant: 0.0)
-
-        let tv_Vsize = NSLayoutConstraint(
-            item: txtView,
-            attribute: NSLayoutAttribute.Height,
-            relatedBy: NSLayoutRelation.Equal,
-            toItem: view,
-            attribute: NSLayoutAttribute.Height,
-            multiplier:0.65,
-            constant: 0.0)
-
+            constant: -1.0*offset)
 
         txtView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        view.addConstraint(tv_Hpos)
-        view.addConstraint(tv_Vpos)
-        view.addConstraint(tv_Hsize)
-        view.addConstraint(tv_Vsize)
+        view.addConstraint(tv_left)
+        view.addConstraint(tv_right)
+        view.addConstraint(tv_top)
+        view.addConstraint(tv_bottom)
         
     } // end of layoutTextView
 
