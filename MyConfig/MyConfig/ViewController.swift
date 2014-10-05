@@ -213,13 +213,63 @@ class ViewController: UIViewController {
     // Button handlers
     
     func showSoft() {
-        pushText("You old softy!")
-//        println("Button 1 (software) was clicked")
+        
+        // Get some software parameters/descriptors
+        
+        let preLang: AnyObject = NSLocale.preferredLanguages()[0]
+        let uuid = UIDevice.currentDevice().identifierForVendor.UUIDString
+        let device = UIDevice.currentDevice().model
+        let sysVer = UIDevice.currentDevice().systemVersion
+        let name = UIDevice.currentDevice().name
+        
+        // Create an output string
+        
+        var soft = "Software details:\n\n"
+        soft += "Device Name: \(name)\n"
+        soft += "Device: \(device)\n"
+        soft += "System Version: \(sysVer)\n"
+        soft += "Preferred Lanuage: \(preLang)\n"
+        soft += "UUID: \(uuid)\n"
+        
+        pushText(soft)
     }
     
     func showHard() {
-        pushText("You are an iron man!")
-//        println("Button 2 (hardware) was clicked")
+        
+        // Same strategy as showSoft
+        
+        let device = UIDevice.currentDevice().model
+        let uuid = UIDevice.currentDevice().identifierForVendor.UUIDString
+        let name = UIDevice.currentDevice().name
+        
+        var hard = "Hardware details:\n\n"
+        hard += "Device Name: \(name)\n"
+        hard += "Device: \(device)\n"
+        hard += "Device width in pixels: \(width) \n"
+        hard += "Device height in pixels: \(height) \n"
+
+        // We have to get the next two values with a trick
+        // as they may not exist (in theory).
+        // See helper functions and SO link.
+        
+        if let size = deviceTotalMemoryInGB() {
+            hard += "Total Memory: \(size) GB\n"
+        } else {
+            println("Could not retrieve total memory")
+        }
+       
+        if let avail = deviceRemainingFreeSpaceInGB() {
+            hard += "Available Memory: \(avail) GB\n"
+        } else {
+            println("Could not retrieve available memory")
+        }
+        
+        // Continue to assemble the string
+        
+        hard += "UUID: \(uuid)\n"
+        
+        pushText(hard)
+    
     }
     
     func pushText(theString: String) {
@@ -229,6 +279,31 @@ class ViewController: UIViewController {
         
     } // end of pushText
     
+    // Helper Functions
+    // See https://stackoverflow.com/questions/26198073/query-available-ios-device-memory-with-swift/26198164#26198164
+    
+    func deviceRemainingFreeSpaceInGB() -> Int64? {
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        if let systemAttributes = NSFileManager.defaultManager().attributesOfFileSystemForPath(documentDirectoryPath.last as String, error: nil) {
+            if let freeSize = systemAttributes[NSFileSystemFreeSize] as? NSNumber {
+                return freeSize.longLongValue/1073741824
+            }
+        }
+        // something failed
+        return nil
+    }
+    
+    func deviceTotalMemoryInGB() -> Int64? {
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        if let systemAttributes = NSFileManager.defaultManager().attributesOfFileSystemForPath(documentDirectoryPath.last as String, error: nil) {
+            if let freeSize = systemAttributes[NSFileSystemSize] as? NSNumber {
+                return freeSize.longLongValue/1073741824
+            }
+        }
+        // something failed
+        return nil
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

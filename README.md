@@ -2,9 +2,9 @@
 
 #### A Simple iOS App to Show Hardware & Software Configuration
 
-`MyConfig is a WORK IN PROGRESS`.  The fundamental structures & behavior are changing frequently.
+`MyConfig` is intended to be a very lean, no frills example of using `Swift` and `autolayout` programatically.  It illustrates a number of basic `Swift` programming techniques.  Finally, it illustrates one more advanced method, namely how to deal with unwrapping optionals in dictionaries.
 
-`MyConfig` is intended to be a very lean, no frills example of using `swift` and `autolayout` programatically. It was created in `Xcode` by creating a new single view iOS application.  The only custom code is in `ViewController.swift`.
+`MyConfig` was created in `Xcode` beginning by creating a new single view iOS application.  The only custom code is in `ViewController.swift`.
 
 #### License Information
 
